@@ -1,7 +1,7 @@
+// Auth routes convert into controllers...
 import express, {Request, Response} from "express";
-
-const passport = require('passport')
-const router = express.Router()
+import passport from'passport';
+const router = express.Router();
 
 
 router.get('/google', passport.authenticate('google', { scope: ['profile','email'] }))
@@ -17,9 +17,7 @@ router.get(
 
 router.get('/logout', (req: Request, res: Response) => {
   req.logout()
-  res.redirect('/')
+  res.redirect('/');
 })
-
-//module.exports = router;
 
 export {router};

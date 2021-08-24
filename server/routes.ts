@@ -1,11 +1,6 @@
-import { request, Router } from 'express';
-import * as express from 'express';
+import app from './index';
+import authRoutes from '../HTTP/routes/AuthRoutes';
+import todoRoutes from '../HTTP/routes/TodoRoutes';
 
-const router = Router();
-router.get('/', (request, response) => {
-  return response.json("OK")});
-
-router.use("./routes/index", router);
-router.use('/auth', router);
-  
-export default router;
+app.use("auth", authRoutes);
+app.use("todo", todoRoutes);

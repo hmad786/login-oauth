@@ -1,36 +1,53 @@
-import * as Sequelize from 'sequelize'
-
+import { Sequelize, Model, DataTypes } from "sequelize";
+import sequelize from '../mysqlConnection';
 import { v4 as uuidv4 } from 'uuid';
 
-class User extends Sequelize.Model {
-    id : string | undefined;
-    googleId: string | undefined;
-    name: String | undefined;
-    emails: String | undefined;
-    createdAt: Date | undefined;
+class User extends Model {
+  public id!: number; // Note that the `null assertion` `!` is required in strict mode.
+  public googleId!: string;
+  public name!: string;
+  public emails!: string;
+  public createdAt!: Date;
   static authenticate: any;
 }
-export const InitUser = (sequelize: Sequelize.Sequelize) => {
 
-    User.init({
-        id: Sequelize.DataTypes.UUID,
-        googleId: Sequelize.DataTypes.STRING,
-        name: Sequelize.DataTypes.STRING,
-        emails: Sequelize.DataTypes.STRING,
-        createdAt: Sequelize.DataTypes.DATE
+User.init(
+  {
+    id: {
+      type: DataTypes.UUID,
+      autoIncrement: true,
+      primaryKey: true,
+      
+    },
+    googleId:{
+      type: new DataTypes.STRING(128),
+      allowNull: false,
+    },
 
-        
-    }, {
-        sequelize, tableName: "userLogin"
-    })
-    uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
-};
+    name: {
+      type: new DataTypes.STRING(128),
+      allowNull: false,
+    },
+    emails: {
+        type: new DataTypes.STRING(128),
+        allowNull: false,
+      },
+      createdAt: {
+      type: new DataTypes.DATE,
+      allowNull: false,
+    },
+
+
+  },
+
+  {
+    tableName: "users",
+    sequelize, // passing the `sequelize` instance is required
+  }
+  
+);
 
 export default User;
-
-
-
-
 
 
 

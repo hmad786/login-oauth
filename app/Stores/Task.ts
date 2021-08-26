@@ -5,6 +5,4 @@ class Task implements {
     fetchById();
     update();
 
-
-
 }

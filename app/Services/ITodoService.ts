@@ -2,7 +2,7 @@ interface ITodoService{
 
     getTodo(): void;
     addTodo(): void;
-    updateTodo(): void;
+    updateTodo():void;
     removeTodo(): void;
 
 

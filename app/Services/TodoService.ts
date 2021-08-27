@@ -4,28 +4,28 @@ import ITodoService from "./ITodoService";
  
 class TodoService implements ITodoService{
 
-    getTodo(){
+    getTodo(todoBody){
         try {
-          const todos  = TaskModel.find()
-          response.status(200).json({ todos })
+          const todos  = TaskModel.find({ _id: todoBody.id }, todoBody, );
+          const response = {todos};
+          return response;
+
         } catch (error) {
           throw error
         }
       }
 
-    addTodo(): void{
+    addTodo(todoBody){
         try {
-            const add = TaskModel.create({
+            TaskModel.create({
                 description: request.body.description,
                 category: request.body.category,
                 date: request.body.date
-            }, (err: any) => {
-                if (err) {
-                    console.log('error in creating task', err);
-                    return; 
-                }
-            })
-        //   return add;
+            }, todoBody,)
+
+            const response = {message: "Todo added"}
+            return response;
+            
     
         }
         catch (error) {
@@ -35,26 +35,26 @@ class TodoService implements ITodoService{
     }
 
 
-    updateTodo(): void{
+    updateTodo(todoBody){
         try {
-            const { params: { id }, body, } = request
-            const updateTodo:| null =  TaskModel.findByIdAndUpdate( { _id: id }, body )
-            const allTodos = TaskModel.find()
-            response.status(200).json({
+
+            const updateTodo:| null =  TaskModel.findByIdAndUpdate( { _id: todoBody.id }, todoBody, )
+            const allTodos = TaskModel.find({ _id: todoBody.id }, todoBody,);
+            const response = {
             message: "Todo updated",
             todo: updateTodo,
             todos: allTodos,
-          })
+            }
+
+            return response;
         } catch (error) {
             console.log(error);
         }
 
-    
-    
-      }
+    }
       
 
-    removeTodo(): void{
+    removeTodo(){
         const id = request.query;
         const count = Object.keys(id).length;
         for(let i=0; i < count ; i++){
@@ -66,6 +66,8 @@ class TodoService implements ITodoService{
                 }
             })
         }
+        const response = {message: "Todo deleted"};
+            return response;
 
        }
 

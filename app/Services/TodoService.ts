@@ -1,19 +1,62 @@
 import {request, Request, response, Response} from "express"; 
 import TaskModel from '../database/mysql/models/TaskModel';
 import ITodoService from "./ITodoService";
+import TaskStore from "../Stores/TaskStore";
+
+import Task from '../../app/database/mysql/models/TaskModel';
  
 class TodoService implements ITodoService{
 
-    getTodo(todoBody){
-        try {
-          const todos  = TaskModel.find({ _id: todoBody.id }, todoBody, );
-          const response = {todos};
-          return response;
 
-        } catch (error) {
-          throw error
-        }
-      }
+//app.get('/', (req, res) => {
+    getTodo(){
+        TaskStore.findAll().then((TaskModel) => {
+          return response.json(Task);
+        });
+
+    }
+
+    //app.post('/', (req, res) => {
+    addTodo(){
+        const {description,category,date} = request.body;
+        TaskStore.create(request.body).then((TaskModel) => {
+            return response.json(Task);
+          });
+
+
+    }
+
+    //app.delete('/:id', (req, res) => {
+
+    removeTodo(){
+        const { id } = request.params;
+        TaskStore.deleteById(id).then((ok) => {
+          console.log(ok);
+          console.log(`Deleted record with id: ${id}`);
+          response.status(200).json([]);
+        });
+
+
+    }
+
+    //app.put('/:id', (req, res) => {
+    updateTodo(){
+        const { id } = request.params;
+        const todo = { description: request.body.description, category: request.body.category, date: request.body.date};
+        TaskStore.updateById(id, todo)
+          .then(response.status(200).json([]));
+
+
+    }
+      
+
+}
+
+
+export default TodoService;
+
+
+ /*   
 
     addTodo(todoBody){
         try {
@@ -77,7 +120,6 @@ class TodoService implements ITodoService{
 export default TodoService;
 
 
-/*
     addTodo = async (req: Request, res: Response): Promise<void> => {
         try {
             TaskModel.create({
@@ -97,4 +139,5 @@ export default TodoService;
         }
 
     }
+    
     */

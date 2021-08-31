@@ -1,5 +1,7 @@
 import {Sequelize}  from 'sequelize';
 import database from '../../config/database';
+import { InitTask } from '../models/task';
+import { InitUser } from '../models/User';
 
 const {DB_HOST, DB_NAME, DB_USERNAME, DB_PASSWORD} = database;
 
@@ -11,5 +13,11 @@ sequelize.authenticate().then(() => {
  .catch(err => {
   console.error('ERROR - Unable to connect to the database:', err);
  })
+
+export const db = {
+  sequelize,
+  Task: InitTask(sequelize),
+  User: InitUser(sequelize)
+}
 
 export default Sequelize;

@@ -1,16 +1,8 @@
-module.exports = {
-  ensureAuth: (req: { isAuthenticated: () => any; }, res: { redirect: (arg0: string) => void; }, next: () => any)=>  {
-    if (req.isAuthenticated()) {
-      return next()
-    } else {
-      res.redirect('/')
-    }
-  },
-  ensureGuest: (req: { isAuthenticated: () => any; }, res: { redirect: (arg0: string) => void; }, next: () => any) => {
-    if (!req.isAuthenticated()) {
-      return next();
-    } else {
-      res.redirect('/log');
-    }
-  },
-}
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import express from 'express';
+const app = express();
+
+// Middlewares
+app.use(bodyParser.urlencoded({ extended: false })) 
+app.use(cookieParser())

@@ -4,22 +4,23 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import cors from "cors";
 import querystring from "querystring";
-import cookieParser from "cookie-parser";
-import * as queryString from 'query-string';
-import google from '../../config/Google';
+import Google from '../../config/Google';
 import IAuthService from './IAuthService';
 import { request, response } from 'express';
 const app = express();
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, COOKIE_NAME, JWT_SECRET, SERVER_ROOT_URI, UI_ROOT_URI } = google;
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, COOKIE_NAME, JWT_SECRET, SERVER_ROOT_URI, UI_ROOT_URI } = Google;
 
 
 class GoogleAuthService implements IAuthService {
+  
+
+  public redirectURI = "auth/google";
 
     generateCredentials() : void{
 
-        gooleAuthUrl();
-        getTokens();
-        googleUserCode();
+        this.gooleAuthUrl();
+        this.getTokens(Google);
+        this.googleUserCode();
 
 
     }
@@ -28,13 +29,13 @@ class GoogleAuthService implements IAuthService {
 //    validateCredentials(): void { }
 
     
-    const redirectURI = "auth/google";
+    
 
-    function gooleAuthUrl() {
+    gooleAuthUrl() {
 
         const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
         const options = {
-          redirect_uri: `${SERVER_ROOT_URI}/${redirectURI}`,
+          redirect_uri: `${SERVER_ROOT_URI}/${this.redirectURI}`,
           client_id: GOOGLE_CLIENT_ID,
           access_type: "offline",
           response_type: "code",
@@ -49,14 +50,14 @@ class GoogleAuthService implements IAuthService {
     }
 
 
-    function getLoginUrl() {
-        return (gooleAuthUrl());
+    getLoginUrl() {
+        return this.gooleAuthUrl();
     }
             
           
 
 
-    function getTokens({
+    getTokens({
         code,
         clientId,
         clientSecret,
@@ -84,15 +85,14 @@ class GoogleAuthService implements IAuthService {
           client_secret: clientSecret,
           redirect_uri: redirectUri,
           grant_type: "authorization_code",
-        };
+        }
       
-      
-        return axios
-          .post(url, querystring.stringify(values), {
+        const authToken = axios
             headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-          })
+              "Content-Type": "application/x-www-form-urlencoded";
+            }
+          return authToken(url)
+
           .then((res) => res.data)
           .catch((error) => {
             console.error(`Failed to fetch auth tokens`);
@@ -101,22 +101,20 @@ class GoogleAuthService implements IAuthService {
 
     }
 
-    function googleUserCode(){
+    async googleUserCode(){
 
     // Getting the user from Google with the code
-        app.get(`/${redirectURI}`, async (req, res) => {
-        const code = req.query.code as string;
-      
-        const { id_token, access_token } = await getTokens({
+        const code = request.query.code as string;
+        const { id_token, access_token } = await this.getTokens({
           code,
           clientId: GOOGLE_CLIENT_ID,
           clientSecret: GOOGLE_CLIENT_SECRET,
-          redirectUri: `${SERVER_ROOT_URI}/${redirectURI}`,
+          redirectUri: `${SERVER_ROOT_URI}/${this.redirectURI}`,
         });
       
         // Fetch the user's profile with the access token and bearer
         const googleUser = await axios
-          .get(
+          (
             `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
             {
               headers: {
@@ -132,19 +130,19 @@ class GoogleAuthService implements IAuthService {
       
         const token = jwt.sign(googleUser, JWT_SECRET);
       
-        res.cookie(COOKIE_NAME, token, {
+        response.cookie(COOKIE_NAME, token, {
           maxAge: 900000,
           httpOnly: true,
           secure: false,
         });
       
-        res.redirect(UI_ROOT_URI);
-      });
+        response.redirect(UI_ROOT_URI);
+      
 
     }
 
 // Getting the current user
-    function getCurrentUser(){
+    getCurrentUser(){
 
         try {
             const decoded = jwt.verify(request.cookies[COOKIE_NAME], JWT_SECRET);

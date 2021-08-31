@@ -3,7 +3,7 @@ import UserModel from '../database/mysql/models/UserModel';
 import IUStore from '../Stores/IUStore';
 
 class UserStore implements IUStore{
-  UserModel: any;
+  //UserModel: any;
   model: any;
   
 

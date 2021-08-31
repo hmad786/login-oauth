@@ -8,7 +8,7 @@ class TaskStore implements ITStore{
   
 
   // create a new todo
-  add(description: string, category: string, date: Date){
+  add(id: string, description: string, category: string, date: Date){
     const newTodo = {description, category, date };
     const todo = new this.TaskModel(newTodo);
 

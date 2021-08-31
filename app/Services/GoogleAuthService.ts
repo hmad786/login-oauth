@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import * as queryString from 'query-string';
 import google from '../../config/Google';
 import IAuthService from './IAuthService';
+import { request, response } from 'express';
 const app = express();
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, COOKIE_NAME, JWT_SECRET, SERVER_ROOT_URI, UI_ROOT_URI } = google;
 
@@ -26,15 +27,7 @@ class GoogleAuthService implements IAuthService {
 
 //    validateCredentials(): void { }
 
-    app.use(
-        cors({
-          // Sets Access-Control-Allow-Origin to the UI URI
-          origin: UI_ROOT_URI,
-          // Sets Access-Control-Allow-Credentials to true
-          credentials: true,
-        })
-      );
-    app.use(cookieParser());
+    
     const redirectURI = "auth/google";
 
     function gooleAuthUrl() {
@@ -92,6 +85,7 @@ class GoogleAuthService implements IAuthService {
           redirect_uri: redirectUri,
           grant_type: "authorization_code",
         };
+      
       
         return axios
           .post(url, querystring.stringify(values), {
@@ -151,24 +145,19 @@ class GoogleAuthService implements IAuthService {
 
 // Getting the current user
     function getCurrentUser(){
-        app.get("/auth/me", (req, res) => {
-        console.log("get me");
 
         try {
-            const decoded = jwt.verify(req.cookies[COOKIE_NAME], JWT_SECRET);
+            const decoded = jwt.verify(request.cookies[COOKIE_NAME], JWT_SECRET);
             console.log("decoded", decoded);
-            return res.send(decoded);
+            return response.send(decoded);
         } catch (err) {
             console.log(err);
-            res.send(null);
+            response.send(null);
             }
-        });
-    }
+        }
 }
 
 export default GoogleAuthService;
-
-
 
 
 

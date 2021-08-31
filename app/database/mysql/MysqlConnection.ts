@@ -7,9 +7,9 @@ import UserModel from './models/UserModel';
 
 const {DB_HOST, DB_NAME, DB_USERNAME, DB_PASSWORD} = database;
 
-const sequelize = new Sequelize(`mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_NAME}`);
+const Connection = new Sequelize(`mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_NAME}`);
 
-sequelize.authenticate().then(() => {
+Connection.authenticate().then(() => {
   console.info('Mysql Database connected.');
  })
  .catch(err => {
@@ -17,9 +17,9 @@ sequelize.authenticate().then(() => {
  })
 
 export const db = {
-  sequelize,
+  Connection,
   TaskModel: TaskModel,
   UserModel: UserModel
 }
 
-export default sequelize;
+export default Connection;

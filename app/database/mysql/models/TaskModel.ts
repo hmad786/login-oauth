@@ -5,7 +5,7 @@ import sequelize from "../MysqlConnection";
 import IModel from './IModel';
 
 
-class Task extends Model {
+class TaskModel extends Model {
   static findByIdAndDelete: any;
     static findByIdfindByIdAndDelete: any;
     static findByIdAndUpdate: any;
@@ -19,7 +19,7 @@ class Task extends Model {
 }
 
 
-Task.init(
+TaskModel.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -46,4 +46,4 @@ Task.init(
   }
 );
 
-export default Task;
+export default TaskModel;

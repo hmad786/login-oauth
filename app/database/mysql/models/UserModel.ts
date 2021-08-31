@@ -1,10 +1,10 @@
 
 import { Sequelize, Model, DataTypes } from "sequelize";
-import sequelize from "../MysqlConnection";
+import Connection from "../MysqlConnection";
 import { v4 as uuidv4 } from 'uuid';
 
 class User extends Model {
-  public id!: number; // Note that the `null assertion` `!` is required in strict mode.
+  public id!: string; // Note that the `null assertion` `!` is required in strict mode.
   public googleId!: string;
   public name!: string;
   public emails!: string;
@@ -16,8 +16,8 @@ User.init(
   {
     id: {
       type: DataTypes.UUID,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: Sequelize.UUIDV4,
       
     },
     googleId:{
@@ -43,7 +43,8 @@ User.init(
 
   {
     tableName: "users",
-    sequelize, // passing the `sequelize` instance is required
+    modelName: "User",
+    Connection, // passing the `sequelize` instance is required
   }
   
 );

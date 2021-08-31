@@ -1,4 +1,4 @@
-import app from './index';
+import app from './bootstrap';
 import authRoutes from '../HTTP/routes/AuthRoutes';
 import todoRoutes from '../HTTP/routes/TodoRoutes';
 

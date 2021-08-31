@@ -1,7 +1,7 @@
 
 import express, {Request, Response} from "express";
 //import passport from'passport';
-import User from '../../app/models/User';
+import User from '../../app/database/mysql/models/User';
 const router = express.Router();
 
 const authenticate = async (req: Request, res: Response) => {

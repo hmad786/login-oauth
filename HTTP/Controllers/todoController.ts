@@ -1,4 +1,4 @@
-import  Task from '../../app/models/task';
+import  Task from '../../app/database/mysql/models/Task';
 import {Request, Response} from "express";
 
 class TodoController{
@@ -52,14 +52,14 @@ static async todoDelete(req: Request, res: Response) {
      for(let i=0; i < count ; i++){
          
          // finding and deleting tasks from db using id...
-         await Task.findByIdAndDelete(Object.keys(id)[i], (err: any) => {
+         Task.findByIdAndDelete(Object.keys(id)[i], (err: any) => {
          if(err){
              console.log('error in deleting task');
              }
          })
      }
      return res.redirect('back'); 
-}
+    }
 }
 export default TodoController;
 

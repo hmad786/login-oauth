@@ -1,38 +1,84 @@
-import  Task from '../../app/database/mysql/models/Task';
-import {Request, Response} from "express"; 
-import IAuthService from './IAuthService';
-import GoogleAuthService from './GoogleAuthService';
+import {request, Request, response, Response} from "express"; 
+import TaskModel from '../database/mysql/models/TaskModel';
+import ITodoService from "./ITodoService";
  
-class TodoService implements IAuthService{
+class TodoService implements ITodoService{
 
-    //getTodo();
-   // addTodo();
-   // removeTodo();
-
-    static async getTodo (req: Request, res: Response){
+    getTodo(){
         try {
-            await Task.find({}, (err: any, task: any) => {
-                if(err){
-                    console.log('Error in fetching tasks from db');
-                    return;
+          const todos  = TaskModel.find()
+          response.status(200).json({ todos })
+        } catch (error) {
+          throw error
+        }
+      }
+
+    addTodo(): void{
+        try {
+            const add = TaskModel.create({
+                description: request.body.description,
+                category: request.body.category,
+                date: request.body.date
+            }, (err: any) => {
+                if (err) {
+                    console.log('error in creating task', err);
+                    return; 
                 }
-        
-                return res.render('home', {
-                    tittle: "Todo List",
-                    task: task
-                });
             })
+        //   return add;
+    
         }
         catch (error) {
-            console.log(error)
-         }
-    
+            console.log(error);
+        }
+
     }
 
 
-    static addTodo (req: Request, res: Response){
+    updateTodo(): void{
         try {
-            Task.create({
+            const { params: { id }, body, } = request
+            const updateTodo:| null =  TaskModel.findByIdAndUpdate( { _id: id }, body )
+            const allTodos = TaskModel.find()
+            response.status(200).json({
+            message: "Todo updated",
+            todo: updateTodo,
+            todos: allTodos,
+          })
+        } catch (error) {
+            console.log(error);
+        }
+
+    
+    
+      }
+      
+
+    removeTodo(): void{
+        const id = request.query;
+        const count = Object.keys(id).length;
+        for(let i=0; i < count ; i++){
+            
+            // finding and deleting tasks from db using id...
+            TaskModel.findByIdfindByIdAndDelete(Object.keys(id)[i], (err: any) => {
+            if(err){
+                console.log('error in deleting task');
+                }
+            })
+        }
+
+       }
+
+
+}
+
+export default TodoService;
+
+
+/*
+    addTodo = async (req: Request, res: Response): Promise<void> => {
+        try {
+            TaskModel.create({
                 description: req.body.description,
                 category: req.body.category,
                 date: req.body.date
@@ -41,35 +87,12 @@ class TodoService implements IAuthService{
                     console.log('error in creating task', err);
                     return; 
                 }
+            })
     
-                return res.redirect('back');
-                });
         }
         catch (error) {
             console.log(error);
-         }
+        }
 
     }
-
-    static async removeTodo(req: Request, res: Response) {
-        const id = req.query;
-        const count = Object.keys(id).length;
-        for(let i=0; i < count ; i++){
-            
-            // finding and deleting tasks from db using id...
-            Task.findByIdAndDelete(Object.keys(id)[i], (err: any) => {
-            if(err){
-                console.log('error in deleting task');
-                }
-            })
-        }
-        return res.redirect('back');
-
-       }
-
-
-}
-
-
-
-export default TodoService;
+    */

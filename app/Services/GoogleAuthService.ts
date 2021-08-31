@@ -1,35 +1,37 @@
 
 import axios from 'axios';
 import * as queryString from 'query-string';
-import google from '../../config/google';
+import google from '../../config/Google';
 const {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET} = google;
 
 import IAuthService from './IAuthService';
-import TodoService from './TodoService';
 
 
 class GoogleAuthService implements IAuthService {
 
-    static generateCredentials(){
+    generateCredentials() : void{
 
-        GoogleAuthService.gooleAuthUrl;
-
-        GoogleAuthService.accessToken;
-
-        GoogleAuthService.googleGetUser;
+        this.gooleAuthUrl();
+        this.accessToken();
 
 
     }
 
 
-    static validateCredentials(){
-        GoogleAuthService.parseCode();
+    validateCredentials(): void {
+        const urlParams = queryString.parse(location.search);
+        if (urlParams.error) {
+        console.log(`An error occurred: ${urlParams.error}`);
+        } else {
+        console.log(`The code is: ${urlParams.code}`);
+        }
+
 
     }
 
 
 
-    static gooleAuthUrl () {
+    gooleAuthUrl() {
         const stringifiedParams = queryString.stringify({
         client_id: GOOGLE_CLIENT_ID,
         redirect_uri: 'http://localhost:3000/auth/google/callback',
@@ -48,19 +50,7 @@ class GoogleAuthService implements IAuthService {
 
     }
 
-    static parseCode(){
-
-        const urlParams = queryString.parse(location.search);
-        if (urlParams.error) {
-        console.log(`An error occurred: ${urlParams.error}`);
-        } else {
-        console.log(`The code is: ${urlParams.code}`);
-        }
-
-
-    }
-
-    static async accessToken(code: any){
+    async accessToken(code: any){
 
         const { data } = await axios({
             url: `https://oauth2.googleapis.com/token`,
@@ -75,11 +65,9 @@ class GoogleAuthService implements IAuthService {
           console.log(data); // { access_token, expires_in, token_type, refresh_token }
           return data.access_token;
 
-
-
     }
 
-    static async googleGetUser(access_token: any){
+    async googleGetUser(access_token: any){
 
         const { data } = await axios({
             url: 'https://www.googleapis.com/oauth2/v2/userinfo',
@@ -92,11 +80,8 @@ class GoogleAuthService implements IAuthService {
           return data;
 
     }
-
-
     
 }
-
 
 export default GoogleAuthService;
 

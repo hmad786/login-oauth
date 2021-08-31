@@ -1,7 +1,9 @@
 import {Sequelize}  from 'sequelize';
-import database from '../../../config/database';
-import InitTask  from './models/Task';
-import { InitUser } from './models/User';
+import database from '../../../config/Database';
+import TaskModel from './models/TaskModel';
+import InitTask  from './models/TaskModel';
+import UserModel from './models/UserModel';
+//import { InitUser } from './models/UserModel';
 
 const {DB_HOST, DB_NAME, DB_USERNAME, DB_PASSWORD} = database;
 
@@ -16,8 +18,8 @@ sequelize.authenticate().then(() => {
 
 export const db = {
   sequelize,
-  Task: new InitTask(sequelize),
-  User: InitUser(sequelize)
+  TaskModel: TaskModel,
+  UserModel: UserModel
 }
 
 export default sequelize;

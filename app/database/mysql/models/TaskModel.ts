@@ -2,7 +2,7 @@
 
 import { Sequelize, Model, DataTypes } from "sequelize";
 import sequelize from "../MysqlConnection";
-import IModel from './IModel';
+import ITModel from './IUModel';
 
 
 class TaskModel extends Model {

@@ -6,8 +6,6 @@ import Google from "../../config/Google";
 const router = express.Router();
 
 class AuthController{
-    static getLoginUrlController: RequestHandler<{}, any, any, ParsedQs, Record<string, any>>;
-    static getCurrentUserController: RequestHandler<{}, any, any, ParsedQs, Record<string, any>>;
 
 
   async getLoginUrlController(req: Request, res: Response) {
@@ -26,7 +24,7 @@ async getCurrentUserController(req: Request, res: Response){
 
 }
 
-  async getTokensCOntroller(req: Request, res:Response) {
+  async getTokensController(req: Request, res:Response) {
   const auth = await GoogleAuthService.getTokens();
 
   res.status(200).send(auth);
@@ -34,6 +32,10 @@ async getCurrentUserController(req: Request, res: Response){
 
   async userCodeController(req: Request, res: Response){
   const auth = await GoogleAuthService.googleUserCode();
+
+  res.status(200).send(auth);
+
+
   
 }
 

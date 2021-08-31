@@ -9,7 +9,7 @@ class TodoController{
 
   async getTodoController(req: Request, res: Response) {
 
-    const todo =await getTodo();
+    const todo =await TodoService.getTodo();
     res.status(200).json(todo );
 }
 
@@ -17,7 +17,7 @@ async addTodoController(req: Request, res: Response) {
 
   const {description,category,date} = req.body;
   const {id} = req.params;
-  const todo = await addTodo({id, description, category, date});
+  const todo = await TodoService.addTodo({id, description, category, date});
 
   res.status(201).send(todo);
 }
@@ -26,19 +26,18 @@ async addTodoController(req: Request, res: Response) {
 async updateTodoController(req: Request, res: Response) {
 
   const {description,category,date} = req.body;
-  const {id} = req.params;
-  const todo = await updateTodo({id, description, category, date});
+  const todo = await TodoService.updateTodo({description, category, date});
 
   res.status(200).send(todo);
 
 }
 
 
-async deleteTodoController(req: Request, res: Response) {
+async removeTodoController(req: Request, res: Response) {
 
   const {description,category,date} = req.body;
   const {id} = req.params;
-  const todo = await removeTodo({id, description, category, date});
+  const todo = await TodoService.removeTodo({id, description, category, date});
 
   res.status(204).send(todo);
 }

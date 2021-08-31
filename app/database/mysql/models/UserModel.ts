@@ -17,7 +17,7 @@ User.init(
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
       
     },
     googleId:{

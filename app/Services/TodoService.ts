@@ -1,32 +1,29 @@
 import {request, Request, response, Response} from "express"; 
-import TaskModel from '../database/mysql/models/TaskModel';
 import ITodoService from "./ITodoService";
 import TaskStore from "../Stores/TaskStore";
 
-import Task from '../../app/database/mysql/models/TaskModel';
+import TaskModel from '../../app/database/mysql/models/TaskModel';
  
 class TodoService implements ITodoService{
 
 
-//app.get('/', (req, res) => {
     getTodo(){
         TaskStore.findAll().then((TaskModel) => {
-          return response.json(Task);
+          return response.json(TaskModel);
         });
 
     }
 
-    //app.post('/', (req, res) => {
+
     addTodo(){
-        const {description,category,date} = request.body;
-        TaskStore.create(request.body).then((TaskModel) => {
-            return response.json(Task);
+        const {id, description,category,date} = request.body;
+        TaskStore.add(request.body).then((TaskModel) => {
+            return response.json(TaskModel);
           });
 
 
     }
 
-    //app.delete('/:id', (req, res) => {
 
     removeTodo(){
         const { id } = request.params;
@@ -39,7 +36,6 @@ class TodoService implements ITodoService{
 
     }
 
-    //app.put('/:id', (req, res) => {
     updateTodo(){
         const { id } = request.params;
         const todo = { description: request.body.description, category: request.body.category, date: request.body.date};
@@ -51,8 +47,6 @@ class TodoService implements ITodoService{
       
 
 }
-
-
 export default TodoService;
 
 

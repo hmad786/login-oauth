@@ -4,9 +4,9 @@ const router = express.Router();
 import TodoController from '../Controllers/TodoController';
 
 // Routes...
-router.get('/', TodoController.getTodo);
-router.post('/create-task', TodoController.todoCreate);
-router.put('/edit-todo/:id', TodoController.todoUpdate);
-router.get('/delete-task', TodoController.todoDelete);
+router.get('/api/user/:id', TodoController.getTodoController);
+router.post('/api/user', TodoController.addTodoController);
+router.put('/api/user/:id', TodoController.updateTodoController);
+router.get('/api/user/:id', TodoController.removeTodoController);
 
 export default router;

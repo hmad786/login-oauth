@@ -1,43 +1,14 @@
 
 
 import { Sequelize, Model, DataTypes } from "sequelize";
-import sequelize from './IModel';
+import sequelize from "../MysqlConnection";
 import IModel from './IModel';
 
-class TaskModel {
-  private _taskModel: IModel;
-  
-  constructor(taskModel: IModel) {
-    this._taskModel = taskModel;
-  }
 
-  get id (): string {
-       return this._taskModel.id;
-  }
-
-  get description (): string {
-    return this._taskModel.description;
-  }
-  get category (): string {
-    return this._taskModel.category;
-  }
-
-  get createdAt (): Date {
-    return this._taskModel.createdAt; 
-  }
-
-
-}
-
-export default TaskModel;
-
-
-
-
-
-/*
 class Task extends Model {
   static findByIdAndDelete: any;
+    static findByIdfindByIdAndDelete: any;
+    static findByIdAndUpdate: any;
   static find(arg0: {}, arg1: (err: any, task: any) => void) {
       throw new Error('Method not implemented.');
   }
@@ -76,5 +47,3 @@ Task.init(
 );
 
 export default Task;
-
-*/

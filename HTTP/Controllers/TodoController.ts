@@ -1,76 +1,48 @@
-import  TaskModel from '../../app/database/mysql/models/Task';
+
 import {Request, Response} from "express";
-import { get } from "lodash";
 
 import TodoService from '../../app/Services/TodoService';
 
 class TodoController{
-    TodoService: any;
 
-addTodoController(req: Request, res: Response) {
-    const userId = get(req, "user._id");
-    const body = req.body;
-  
-    const post = addTodo ({ ...body, user: userId });
-  
-    return res.send(post);
+
+
+  async getTodoController(req: Request, res: Response) {
+
+    const todo =await getTodo();
+    res.status(200).json(todo );
+}
+
+async addTodoController(req: Request, res: Response) {
+
+  const {description,category,date} = req.body;
+  const {id} = req.params;
+  const todo = await addTodo({id, description, category, date});
+
+  res.status(201).send(todo);
 }
 
 
-updateTodoController(req: Request, res: Response) {
-    const userId = get(req, "user._id");
-    const postId = get(req, "params.postId");
-    const update = req.body;
-  
-    const post = findPost({ postId });
-  
-    if (!post) {
-      return res.sendStatus(404);
-    }
-  
-    if (String(post.user) !== userId) {
-      return res.sendStatus(401);
-    }
-  
-        const updatedPost = findAndUpdate({ postId }, update, { new: true });
-  
-        return res.send(updatedPost);
-  
-    }
+async updateTodoController(req: Request, res: Response) {
+
+  const {description,category,date} = req.body;
+  const {id} = req.params;
+  const todo = await updateTodo({id, description, category, date});
+
+  res.status(200).send(todo);
+
+}
 
 
-    deletePostHandler(req: Request, res: Response) {
-        const userId = get(req, "user._id");
-        const postId = get(req, "params.postId");
-      
-        const post = findPost({ postId });
-      
-        if (!post) {
-          return res.sendStatus(404);
-        }
-      
-        if (String(post.user) !== String(userId)) {
-          return res.sendStatus(401);
-        }
-      
-        deletePost({ postId });
-      
-        return res.sendStatus(200);
-      }
+async deleteTodoController(req: Request, res: Response) {
+
+  const {description,category,date} = req.body;
+  const {id} = req.params;
+  const todo = await removeTodo({id, description, category, date});
+
+  res.status(204).send(todo);
+}
 
 
 }
 export default TodoController;
-
-function addTodo(arg0: any) {
-    throw new Error('Function not implemented.');
-}
-
-function findPost(arg0: { postId: any; }) {
-    throw new Error('Function not implemented.');
-}
-
-function findAndUpdate(arg0: { postId: any; }, update: any, arg2: { new: boolean; }) {
-    throw new Error('Function not implemented.');
-}
-
